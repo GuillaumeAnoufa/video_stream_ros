@@ -1,0 +1,21 @@
+<launch>
+
+    <arg name="source_type" default="videofile"/>
+    <arg name="video_source" default="test.mp4"/>
+
+    <arg name="width" default="1920"/>
+    <arg name="height" default="1080"/>
+    <arg name="fps" default="30"/>
+
+
+
+	<param name="source_type" type="string" value="$(arg source_type)" />
+	<param name="video_source" type="string" value="$(arg video_source)" />
+	<param name="fps" type="int" value="$(arg fps)" />
+	<param name="width" type="int" value="$(arg width)" />
+	<param name="height" type="int" value="$(arg height)" />
+
+	<node pkg="video_stream" type="video_stream" name="$(arg source_type)_video_stream" output="screen"/>
+
+
+</launch>
