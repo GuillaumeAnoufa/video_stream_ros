@@ -1,13 +1,13 @@
 <launch>
 
     <arg name="source_type" default="webcam"/>
-    <arg name="video_source" default="/dev/video4"/>
+    <arg name="video_source" default="/dev/video8"/>
 
     <arg name="width" default="1920"/>
     <arg name="height" default="1080"/>
     <arg name="fps" default="30"/>
 
-
+    <arg name="test-stream" default="true"/>
 
 	<param name="source_type" type="string" value="$(arg source_type)" />
 	<param name="video_source" type="string" value="$(arg video_source)" />
@@ -16,5 +16,18 @@
 	<param name="height" type="int" value="$(arg height)" />
 
 	<node pkg="video_stream" type="video_stream" name="$(arg source_type)_video_stream" output="screen"/>
+
+    <arg name="image-topic" default="/camera/image_raw/compressed"/>
+
+	<!-- parameters for compression (format is 'jpeg' or 'png') 
+		PNG is lossless but SLOW - higher compression lvl = higher computation (value in [1,9] where 9 is max compression)
+		JPEG degrades quality but FAST - (value in [0-100], where 100 is maximum quality)
+	-->
+	<param name="$(arg image-topic)/format" type="string" value="jpeg"/>
+	<param name="$(arg image-topic)/jpeg_quality" type="int" value="95"/>
+	<param name="$(arg image-topic)/png_level" type="int" value="1"/>
+
+	<node if="$(arg test-stream)" pkg="video_stream" type="video_test.py" name="video_test_node"
+		output="screen" args="--image-topic $(arg image-topic)"/>
 
 </launch>
